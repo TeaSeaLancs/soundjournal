@@ -5,18 +5,23 @@ import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 import { QueryClientProvider } from 'react-query';
+import { Provider } from 'react-redux';
 import { ThemeProvider } from '@material-ui/core/styles';
 
 import queryClient from './api/queryClient';
+import createStore from './state';
+
+const store = createStore();
+window.store = store;
 
 ReactDOM.render(
-    <React.StrictMode>
-        <ThemeProvider>
+    <ThemeProvider>
+        <Provider store={store}>
             <QueryClientProvider client={queryClient}>
                 <App />
             </QueryClientProvider>
-        </ThemeProvider>
-    </React.StrictMode>,
+        </Provider>
+    </ThemeProvider>,
     document.getElementById('root'),
 );
 

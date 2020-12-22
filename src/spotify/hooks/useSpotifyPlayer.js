@@ -2,7 +2,7 @@ import { useRef, useEffect, useState } from 'react';
 
 import useSpotifyReady from './useSpotifyReady';
 
-export default function useSpotifyPlayer({ name = 'Spotify stories', getOAuthToken } = {}) {
+export default function useSpotifyPlayer({ name = 'Spotify stories', getOAuthToken } = {}, events) {
     const playerRef = useRef();
     const spotifyReady = useSpotifyReady();
 
@@ -30,6 +30,9 @@ export default function useSpotifyPlayer({ name = 'Spotify stories', getOAuthTok
 
         player.addListener('ready', ({ device_id }) => {
             console.log('Ready with Device ID', device_id);
+            if (events?.onNewDeviceId) {
+                events.onNewDeviceId(device_id);
+            }
         });
 
         // Not Ready

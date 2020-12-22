@@ -11,16 +11,17 @@ async function getSpotifyToken() {
     return token;
 }
 
-function useGetSpotifyToken() {
+function useGetSpotifyToken(options = {}) {
     return useQuery('spotifyToken', getSpotifyToken, {
+        ...options,
         refetchOnWindowFocus: false,
         staleTime: 60 * 1000,
         cacheTime: 60 * 1000,
     });
 }
 
-export default function useSpotifyToken() {
-    const { data: token, refetch } = useGetSpotifyToken();
+export default function useSpotifyToken({ onNewToken } = {}) {
+    const { data: token, refetch } = useGetSpotifyToken({ onSuccess: onNewToken });
 
     // It's important that this callback is static because it gets passed into the spotify
     // player on init.

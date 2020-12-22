@@ -1,9 +1,15 @@
 import './App.css';
 
 import SpotifyMain from './player/SpotifyMain';
+import TestPlayButton from './player/TestPlayButton';
 
 function App() {
-    return <SpotifyMain />;
+    return (
+        <>
+            <TestPlayButton />
+            <SpotifyMain />
+        </>
+    );
 }
 
 export default App;

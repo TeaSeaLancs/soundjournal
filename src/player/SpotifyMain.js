@@ -1,5 +1,6 @@
 import { Suspense } from 'react';
 import PropTypes from 'prop-types';
+import { useDispatch } from 'react-redux';
 
 import Button from '@material-ui/core/Button';
 import CircularProgress from '@material-ui/core/CircularProgress';
@@ -10,6 +11,8 @@ import PlayerStatus from '../spotify/PlayerStatus';
 import useSpotifyToken from '../api/useSpotifyToken';
 import useSpotifyAuth from '../api/useSpotifyAuth';
 import PlayerBar from './PlayerBar';
+
+import { setToken, setDeviceId } from '../state/spotify';
 
 function LoginHandler({ onClick }) {
     return (
@@ -24,7 +27,11 @@ LoginHandler.propTypes = {
 };
 
 function SpotifyAuthRouter() {
-    const { token, getOAuthToken, refetch } = useSpotifyToken();
+    const dispatch = useDispatch();
+    const onNewToken = (token) => dispatch(setToken(token));
+    const onNewDeviceId = (deviceId) => dispatch(setDeviceId(deviceId));
+
+    const { token, getOAuthToken, refetch } = useSpotifyToken({ onNewToken });
     const startAuth = useSpotifyAuth(refetch);
 
     const loggedIn = Boolean(token);
@@ -34,7 +41,7 @@ function SpotifyAuthRouter() {
     }
 
     return (
-        <SpotifyPlayer getOAuthToken={getOAuthToken}>
+        <SpotifyPlayer getOAuthToken={getOAuthToken} onNewDeviceId={onNewDeviceId}>
             <PlayerStatus />
         </SpotifyPlayer>
     );
